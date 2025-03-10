@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qd.mapper.OrdersMapper">
+
+    <select id="getList" resultType="com.qd.entity.Orders">
+
+        select orders.*, desk.dname from orders,desk where orders.desk_id = desk.id
+
+        <if test="states!=null and states!=''">
+            and states = #{states}
+        </if>
+
+        <if test="deskId!=null and deskId!=''">
+            and desk_id = #{deskId}
+        </if>
+
+        <if test="timeMin!=null and timeMin!='' and timeMax!=null and timeMax!=''">
+            and order_time between #{timeMin} and #{timeMax}
+        </if>
+
+        <if test="page!=null and limit!=''">
+            limit ${(page-1)*limit} ,#{limit}
+        </if>
+
+    </select>
+</mapper>

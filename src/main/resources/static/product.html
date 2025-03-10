@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>table 组件综合演示 - Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--引入layui样式-->
+    <link href="//unpkg.com/layui@2.9.18/dist/css/layui.css" rel="stylesheet">
+    <style>
+        table img{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<!--添加的表单-->
+<form class="layui-form" action=""  style="display: none; padding:15px;"  id="addForm">
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="pname" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图片</label>
+        <div class="layui-input-block">
+            <!-- 图片上传组件 -->
+            <div class="layui-upload-drag" style="display: block;" id="ID-upload-demo-drag">
+                <i class="layui-icon layui-icon-upload"></i>
+                <div>点击上传，或将文件拖拽到此处</div>
+                <div class="layui-hide" id="ID-upload-demo-preview">
+                    <hr> <img src="" alt="上传成功后渲染" style="max-width: 100%">
+                </div>
+            </div>
+            <!--输入框保留，且设置为只读，加id-->
+            <input type="text" name="img" id="img1"  readonly  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-block">
+            <input type="number" name="price" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">原价</label>
+        <div class="layui-input-block">
+            <input type="number" name="oldPrice" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">口味</label>
+        <div class="layui-input-block">
+            <input type="text" name="taste" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">上下架</label>
+        <div class="layui-input-block">
+            <select name="saleOnOff" >
+                <option value="0">下架</option>
+                <option value="1">上架</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属分类</label>
+        <div class="layui-input-block">
+            <select name="tid" class="tid" >
+                <!-- 向服务端发请求获取 -->
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权重</label>
+        <div class="layui-input-block">
+            <input type="text" name="weight" value="0" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="addBtn">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!--添加的表单 结束-->
+
+<!--修改的表单-->
+<form class="layui-form" action=""  style="display: none; padding:15px;"  id="updateForm"  lay-filter="updateForm">
+    <div class="layui-form-item">
+        <label class="layui-form-label">id</label>
+        <div class="layui-input-block">
+            <input type="text" name="id" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="pname" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图片</label>
+        <div class="layui-input-block">
+            <!--上传图片的组件-->
+            <div class="layui-upload-drag" style="display: block;" id="ID-upload-demo-drag2">
+                <i class="layui-icon layui-icon-upload"></i>
+                <div>点击上传，或将文件拖拽到此处</div>
+                <div class="layui-hide" id="ID-upload-demo-preview2">
+                    <hr> <img src="" alt="上传成功后渲染" style="max-width: 100%">
+                </div>
+            </div>
+            <!--图片的表单元素，保留，只读，id-->
+            <input type="text" name="img" id="img2" readonly lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-block">
+            <input type="number" name="price" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">原价</label>
+        <div class="layui-input-block">
+            <input type="number" name="oldPrice" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">口味</label>
+        <div class="layui-input-block">
+            <input type="text" name="taste" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">上下架</label>
+        <div class="layui-input-block">
+            <select name="saleOnOff" >
+                <option value="0">下架</option>
+                <option value="1">上架</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属分类</label>
+        <div class="layui-input-block">
+            <select name="tid" class="tid" >
+                <!-- 向服务端发请求获取 -->
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权重</label>
+        <div class="layui-input-block">
+            <input type="text" name="weight" value="0" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="updateBtn">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!--修改的表单 结束-->
+
+
+
+
+
+<!--查询的表单-->
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">菜品名</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="pname" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">所属类型</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <select name="tid" class="tid" >
+                    <option value="">请选择</option>
+                    <!-- 向服务端发请求获取 -->
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="selectBtn">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!--查询的表单结束-->
+
+
+<!--表格容器-->
+<div style="padding: 16px;">
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+
+
+<!--头部工具条-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+    </div>
+</script>
+
+
+<!--行内工具条-->
+<script type="text/html" id="toolDemo">
+    <div class="layui-clear-space">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-bg-red" lay-event="del">删除</a>
+    </div>
+</script>
+
+<!-- 引入layui的脚本 -->
+<script src="//unpkg.com/layui@2.9.18/dist/layui.js"></script>
+<script>
+    layui.use(['table', 'dropdown'], function(){
+        var table = layui.table;
+        var dropdown = layui.dropdown;
+        var $ = layui.$;
+        var form = layui.form;
+        var upload = layui.upload;
+
+        // 渲染上传组件-----添加
+        upload.render({
+            elem: '#ID-upload-demo-drag',
+            url: '/upload', // 实际使用时改成您自己的上传接口即可。
+            done: function(res){
+                layer.msg('上传成功');
+                $('#ID-upload-demo-preview').removeClass('layui-hide')
+                    .find('img').attr('src', '/showPic/'+res.data).css('width','100px');
+                //将上传成功的图片名称放在输入框中（代替手填）
+                $('#img1').val(res.data)
+                console.log(res)
+            }
+        });
+
+
+        // 渲染上传组件---修改
+        upload.render({
+            elem: '#ID-upload-demo-drag2',
+            url: '/upload', // 实际使用时改成您自己的上传接口即可。
+            done: function(res){
+                layer.msg('上传成功');
+                $('#ID-upload-demo-preview2').removeClass('layui-hide')
+                    .find('img').attr('src', '/showPic/'+res.data).css('width','100px');
+                //将上传成功的图片名称放在输入框中（代替手填）
+                $('#img2').val(res.data)
+                console.log(res)
+            }
+        });
+
+
+
+
+
+
+        //发请求，获取"分类列表"，渲染在页面的下拉框 class="tid"
+        $.get("/type/",function(res){
+            for (let t of res.data) {
+                $(".tid").append(`<option value="${t.id}">${t.tname}</option>`)
+            }
+            form.render('select'); // 仅渲染 select 元素
+        },"json")
+
+
+
+
+
+
+        // 表单的提交事件监听--------搜索
+        form.on('submit(selectBtn)', function(data){
+            // console.log(data.field)
+            table.reload("test",{where:data.field}); //表格重载
+            return false; // 阻止默认 form 跳转
+        });
+
+
+
+
+        // 表单的提交事件监听--------添加
+        form.on('submit(addBtn)', function(data){
+            var field = data.field; // 获取表单字段值
+            // 此处可执行 Ajax 等操作
+            $.ajax({
+                url:"/product/",
+                method:"post",
+                contentType: 'application/json',
+                data: JSON.stringify(field) ,
+                dataType:"json",
+                success:function(res){
+                    if(res.code==200){
+                        layer.closeAll(); // 关闭所有类型的层
+                        table.reload("test",{})
+                    }else{
+                        layer.msg(res.msg)
+                    }
+                }
+            })
+            return false; // 阻止默认 form 跳转
+        });
+
+
+
+
+
+
+
+        // 表单的提交事件监听--------修改
+        form.on('submit(updateBtn)', function(data){
+            var field = data.field; // 获取表单字段值
+            // 此处可执行 Ajax 等操作
+            $.ajax({
+                url:"/product/",
+                method:"put",
+                contentType: 'application/json',
+                data: JSON.stringify(field) ,
+                dataType:"json",
+                success:function(res){
+                    if(res.code==200){
+                        layer.closeAll(); // 关闭所有类型的层
+                        table.reload("test",{}); //表格重载
+                    }else{
+                        layer.msg(res.msg)
+                    }
+                }
+            })
+            return false; // 阻止默认 form 跳转
+        });
+
+
+
+        // 表格渲染
+        table.render({
+            elem: '#test',
+            url: '/product/', // 请求接口！
+            toolbar: '#toolbarDemo',
+            cellMinWidth: 80,
+            page: true,
+            cols: [[   //表头！
+                {type: 'checkbox', fixed: 'left'},
+                {field:'id', fixed: 'left', width:80, title: 'ID', sort: true, totalRow: '合计：'},
+                {field:'pname', width:100, title: '产品名称'},
+                {field:'img',  title: '图片', templet: '<div> <img src="/showPic/{{d.img}}"/> </div>'  },
+                {field:'price',  title: '价格'},
+                {field:'oldPrice', title: '原价'},
+                {field:'taste',  title: '口味'},
+                {field:'saleMonth',  title: '月销量'},
+                {field:'saleOnOff',  title: '上下架' , templet: function(d){
+                        if(d.saleOnOff==0){
+                            return  '<input type="checkbox" value="'+d.id+'" name="open" lay-skin="switch" lay-filter="switchTest" title="上架|下架">'
+                        }else{
+                            return  '<input type="checkbox" value="'+d.id+'" name="open" lay-skin="switch" lay-filter="switchTest" title="上架|下架" checked>'
+                        }
+                    }
+                },
+                {field:'tid',  title: '所属分类'},
+                {field:'weight',  title: '权重'},
+                {fixed: 'right', title:'操作', width: 134, minWidth: 125, templet: '#toolDemo'}
+            ]]
+        });
+
+
+
+        // 指定开关事件
+        form.on('switch(switchTest)', function(data){
+            //获取当前开关是否开启
+            var num = this.checked ? 1 : 0;
+            //设置请求的参数： 要修改的id, 是否上下架
+            var field = {id:data.value,saleOnOff:num}
+            //向服务端发送编辑请求
+            $.ajax({
+                url:"/product/",
+                method:"put",
+                contentType: 'application/json',
+                data: JSON.stringify(field) ,
+                dataType:"json",
+                success:function(res){
+                    console.log(res)
+                }
+            })
+        });
+
+
+
+        // 头部工具栏事件监听
+        table.on('toolbar(test)', function(obj){
+            var id = obj.config.id;
+            var checkStatus = table.checkStatus(id);
+            var othis = lay(this);
+            switch(obj.event){
+                case 'add':
+                    //重置表单
+                    $('#addForm')[0].reset();
+                    layui.form.render();
+                    $('#ID-upload-demo-preview').addClass('layui-hide')
+                        .find('img').attr('src', '');
+
+                    // 弹窗
+                    layer.open({
+                        type: 1, // page 层类型
+                        area: ['80%', '80%'],
+                        title: '添加',
+                        shadeClose: true, // 点击遮罩区域，关闭弹层
+                        maxmin: true, // 允许全屏最小化
+                        anim: 0, // 0-6 的动画形式，-1 不开启
+                        content: $("#addForm")
+                    });
+                    break;
+
+            };
+        });
+
+
+        // 行内工具栏事件监听
+        table.on('tool(test)', function(obj){ // 双击 toolDouble
+            var data = obj.data; // 获得当前行数据
+            // console.log(obj)
+            if(obj.event === 'edit'){
+                //给表单赋值
+                form.val("updateForm",data);
+                //设置图片的展示
+                $('#ID-upload-demo-preview2').removeClass('layui-hide')
+                    .find('img').attr('src', '/showPic/'+data.img).css('width','100px');
+
+                //弹窗
+                layer.open({
+                    title: '编辑 - id:'+ data.id,
+                    type: 1,
+                    area: ['80%','80%'],
+                    content: $("#updateForm")
+                });
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行 [id: '+ data.id +'] 么', function(index){
+                    obj.del(); // 删除对应行（tr）的DOM结构
+                    layer.close(index);
+                    // 向服务端发送删除指令
+                    $.ajax({
+                        url:"/product/",
+                        method:"delete",
+                        data:{id: data.id},
+                        dataType:"json",
+                        success:function(res){
+                            alert(res.msg)
+                        }
+                    })
+
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
